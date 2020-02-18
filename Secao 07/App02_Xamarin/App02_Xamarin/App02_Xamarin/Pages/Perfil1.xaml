@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App02_Xamarin.Pages.Perfil1">
+    <ContentPage.Content>
+        <StackLayout Spacing="0">
+            <RelativeLayout VerticalOptions="Start" HeightRequest="300">
+                <Image Source="Fundo.png"
+                       RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+                       />
+                <Image Source="Perfil.png"
+                       x:Name="Perfil"
+                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=0.5, Constant=-60}"
+                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=0.2}"
+                       WidthRequest="120"
+                       />
+
+                <Label Text="Miguel de Icaza" 
+                       RelativeLayout.XConstraint="{ConstraintExpression Type=RelativeToView, ElementName=Perfil, Property=X, Factor=1}"
+                       RelativeLayout.YConstraint="{ConstraintExpression Type=RelativeToView, ElementName=Perfil, Property=Y, Factor=1, Constant=180 }"
+                       />
+
+            </RelativeLayout>
+
+            <Grid HeightRequest="120" BackgroundColor="#0D1F2D">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout Grid.Column="0" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label Text="18" TextColor="White" FontSize="32"/>
+                    <Label Text="anos" HorizontalTextAlignment="Center" TextColor="White" FontSize="12"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <Label Text="10/01/2000" TextColor="White" FontSize="32"/>
+                    <Label Text="Nasceu" HorizontalTextAlignment="Center" TextColor="White" FontSize="12"/>
+                </StackLayout>
+            </Grid>
+            <StackLayout Padding="30" BackgroundColor="White" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <Label Text="Miguel de Icaza nasceu na Cidade do Perdigão Minas Gerais não, não é a cidade do presunto presunto presunto presunto presunto presunto presunto presunto presunto presunto presunto presunto presunto presunto, Ele fez um monte de coisa, e muitas coisas mesmos, só to repetiundo pra ficar grande o texto eai bao? enfim ignore erros de digitaçaõ tchau"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
