@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App1_NossoChat.View.Mensagem">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Atualizar mensagens" Icon="refresh.png" Command="AtualizarCommand"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout x:Name="SLMensagemContainer">
+                    <Frame OutlineColor="#5ED055" CornerRadius="0" HorizontalOptions="Start">
+                        <StackLayout>
+                            <Label Text="Alanzoka" FontSize="10" TextColor="#5ED055"/>
+                            <Label Text="Olá Amigos!" TextColor="#5ED055"/>
+                        </StackLayout>
+                    </Frame>
+
+                    <StackLayout Padding="5" BackgroundColor="#5ED055" HorizontalOptions="End">
+                        <Label Text="KEKW" TextColor="White"/> 
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            
+            <StackLayout Orientation="Horizontal">
+                    <Entry Text="{Binding TxtMensagem}" Placeholder="Digitar mensagem" TextColor="#5ED055" BackgroundColor="White" HorizontalOptions="FillAndExpand"/>
+                <Button Command="{Binding BtnEnviarCommand}"
+                        BackgroundColor="#5ED055" 
+                        TextColor="White"
+                        Text="Enviar"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
