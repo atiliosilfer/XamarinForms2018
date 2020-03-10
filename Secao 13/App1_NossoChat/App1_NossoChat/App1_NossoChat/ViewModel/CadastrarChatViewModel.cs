@@ -5,34 +5,68 @@ using Xamarin.Forms;
 using App1_NossoChat.Model;
 using App1_NossoChat.Service;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
-namespace App1_NossoChat.ViewModel 
-{
-    public class CadastrarChatViewModel : INotifyPropertyChanged
-    {
+namespace App1_NossoChat.ViewModel {
+    public class CadastrarChatViewModel : INotifyPropertyChanged {
         public Command CadastrarCommand { get; set; }
+
+        private bool _carregando;
+        public bool Carregando {
+            get { return _carregando; }
+            set {
+                _carregando = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Carregando"));
+            }
+        }
+
         public string nome { get; set; }
-        public string mensagem { get { return _mensagem; } set { _mensagem = value; OnPropertyChanged("mensagem") ;} }
+        public string mensagem {
+            get { return _mensagem; }
+            set {
+                _mensagem = value;
+                OnPropertyChanged("mensagem");
+            }
+        }
 
         private string _mensagem { get; set; }
 
         public CadastrarChatViewModel() {
-            CadastrarCommand = new Command(Cadastrar);
+            CadastrarCommand = new Command(CadastrarButton);
         }
 
-        private void Cadastrar () {
-            var chat = new Chat() { nome = nome };
-            bool ok = ServiceWS.InsertChat(chat);
-            if (ok) {
-                ((NavigationPage)App.Current.MainPage).Navigation.PopAsync();
-                var Nav = ((NavigationPage)App.Current.MainPage);
-                var Chats = (View.Chats)Nav.RootPage;
-                var ViewModel = (ChatsViewModel)Chats.BindingContext;
-                if (ViewModel.AtualizarCommand.CanExecute(null)) { 
-                    ViewModel.AtualizarCommand.Execute(null);
+        private void CadastrarButton() {
+            bool resultado = Task.Run(() => Cadastrar()).GetAwaiter().GetResult();
+
+            if (resultado == true) {
+                var PaginaAtual = ((NavigationPage)App.Current.MainPage);
+                PaginaAtual.PopAsync();
+            }
+        }
+
+        private async Task<bool> Cadastrar() {
+            Carregando = true;
+            try {
+                var chat = new Chat() { nome = nome };
+                bool ok = await ServiceWS.InsertChat(chat);
+                if (ok) {
+                    var PaginaAtual = ((NavigationPage)App.Current.MainPage);
+
+                    var Chats = (View.Chats)PaginaAtual.RootPage;
+                    var ViewModel = (ChatsViewModel)Chats.BindingContext;
+                    if (ViewModel.AtualizarCommand.CanExecute(null)) {
+                        ViewModel.AtualizarCommand.Execute(null);
+                    }
+                    return true;
+                } else {
+                    mensagem = "Ocorreu um erro no cadastro";
+                    Carregando = false;
+                    return true;
                 }
-            } else {
-                mensagem = "Ocorreu um erro no cadastro";
+            } catch (Exception e) {
+                mensagem = e.Message;
+                Carregando = false;
+                return false;
             }
         }
 

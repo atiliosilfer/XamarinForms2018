@@ -6,10 +6,11 @@ using System.ComponentModel;
 using App1_NossoChat.Model;
 using App1_NossoChat.Service;
 using Xamarin.Forms;
-
+using System.Threading.Tasks;
 
 namespace App1_NossoChat.ViewModel {
     public class ChatsViewModel : INotifyPropertyChanged {
+
 
         public Command AdicionarCommand { get; set; }
         public Command OrdenarCommand { get; set; }
@@ -31,11 +32,30 @@ namespace App1_NossoChat.ViewModel {
             }
         }
 
+        private bool _carregando;
+        public bool Carregando {
+            get { return _carregando; }
+            set {
+                _carregando = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Carregando"));
+            }
+        }
+
         public ChatsViewModel() {
-            Chats = ServiceWS.GetChats();
+            Task.Run(()=>CarregarChats());
             AdicionarCommand = new Command(Adicionar);
             OrdenarCommand = new Command(Ordenar);
             AtualizarCommand = new Command(Atualizar);
+        }
+
+        private async Task CarregarChats() {
+            try { 
+            Carregando = true;
+            Chats = await ServiceWS.GetChats();
+            Carregando = false;
+            } catch (Exception e) {
+                Carregando = false;
+            }
         }
 
         private void GoPaginaMensagem(Chat chat) {
@@ -54,7 +74,7 @@ namespace App1_NossoChat.ViewModel {
         }
 
         public void Atualizar() {
-            Chats = ServiceWS.GetChats();
+            Task.Run(() => CarregarChats());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace App1_NossoChat.Service {
     public class ServiceWS {
         private static string EnderecoBase = "http://ws.spacedu.com.br/xf2018/rest/api";
 
-        public static Usuario GetUsuario(Usuario usuario) {
+        public async static Task<Usuario> GetUsuario(Usuario usuario) {
             var URL = EnderecoBase + "/usuario";
             Usuario retorno = null;
 
@@ -22,33 +23,35 @@ namespace App1_NossoChat.Service {
             });
 
             HttpClient requisicao = new HttpClient();
-            HttpResponseMessage resposta = requisicao.PostAsync(URL, param).GetAwaiter().GetResult();
+            HttpResponseMessage resposta = await requisicao.PostAsync(URL, param);
 
             if (resposta.StatusCode == HttpStatusCode.OK) {
-                var conteudo = resposta.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var conteudo = await resposta.Content.ReadAsStringAsync();
                 retorno = JsonConvert.DeserializeObject<Usuario>(conteudo);
             }
 
             return retorno;
         }
 
-        public static List<Chat> GetChats() {
+        public async static Task<List<Chat>> GetChats() {
             var URL = EnderecoBase + "/chats";
             List<Chat> lista = null;
 
             HttpClient requisicao = new HttpClient();
-            HttpResponseMessage resposta = requisicao.GetAsync(URL).GetAwaiter().GetResult();
+            HttpResponseMessage resposta = await requisicao.GetAsync(URL);
 
             if (resposta.StatusCode == HttpStatusCode.OK) {
-                string conteudo = resposta.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                if (conteudo.Length > 2) {
-                    lista = JsonConvert.DeserializeObject<List<Chat>>(conteudo);
-                } 
+                string conteudo = await resposta.Content.ReadAsStringAsync();
+                if (conteudo != null) {
+                    if (conteudo.Length > 2) {
+                        lista = JsonConvert.DeserializeObject<List<Chat>>(conteudo);
+                    }
+                }
             }
             return lista;
         }
 
-        public static bool InsertChat(Chat chat) {
+        public async static Task<bool> InsertChat(Chat chat) {
             var URL = EnderecoBase + "/chat";
             bool resp = false;
 
@@ -57,7 +60,7 @@ namespace App1_NossoChat.Service {
             });
 
             HttpClient requisicao = new HttpClient();
-            HttpResponseMessage resposta = requisicao.PostAsync(URL, param).GetAwaiter().GetResult();
+            HttpResponseMessage resposta = await requisicao.PostAsync(URL, param);
 
             if (resposta.StatusCode == HttpStatusCode.OK) {
                 resp = true;
@@ -95,24 +98,27 @@ namespace App1_NossoChat.Service {
             return resp;
         }
 
-        public static List<Mensagem> GetMensagensChat(Chat chat) {
+        public async static Task<List<Mensagem>> GetMensagensChat(Chat chat) {
             var URL = EnderecoBase + "/chat/" + chat.id + "/msg";
             List<Mensagem> lista = null;
 
             HttpClient requisicao = new HttpClient();
-            HttpResponseMessage resposta = requisicao.GetAsync(URL).GetAwaiter().GetResult();
+            HttpResponseMessage resposta = await requisicao.GetAsync(URL);
 
             if (resposta.StatusCode == HttpStatusCode.OK) {
-                string conteudo = resposta.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                if (conteudo.Length > 2) {
-                    lista = JsonConvert.DeserializeObject<List<Mensagem>>(conteudo); ;
+                string conteudo = await resposta.Content.ReadAsStringAsync();
+
+                if (conteudo != null) {
+                    if (conteudo.Length > 2) {
+                        lista = JsonConvert.DeserializeObject<List<Mensagem>>(conteudo); ;
+                    }
                 }
             }
 
             return lista;
         }
 
-        public static bool InsertMensagem (Mensagem mensagem) {
+        public static bool InsertMensagem(Mensagem mensagem) {
             var URL = EnderecoBase + "/chat/" + mensagem.id_chat + "/msg";
             bool resp = false;
 

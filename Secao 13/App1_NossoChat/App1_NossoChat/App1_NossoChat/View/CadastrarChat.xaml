@@ -4,10 +4,19 @@
              x:Class="App1_NossoChat.View.CadastrarChat"
              BackgroundColor="#5ED055">
     <ContentPage.Content>
-        <StackLayout HorizontalOptions="CenterAndExpand">
-            <Entry Text="{Binding nome}" Placeholder="Nome do chat" BackgroundColor="White" TextColor="#5ED055" HorizontalOptions="FillAndExpand"/>
-            <Button Text="Cadastrar" BackgroundColor="Transparent" TextColor="White" Command="{Binding CadastrarCommand}"/>
-            <Label Text="{Binding mensagem}" TextColor="White"/>
-        </StackLayout>
+        <AbsoluteLayout>
+            <StackLayout HorizontalOptions="CenterAndExpand" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
+                <Entry Text="{Binding nome}" Placeholder="Nome do chat" BackgroundColor="White" TextColor="#5ED055" HorizontalOptions="FillAndExpand"/>
+                <Button Text="Cadastrar" BackgroundColor="Transparent" TextColor="White" Command="{Binding CadastrarCommand}"/>
+                <Label Text="{Binding mensagem}" TextColor="White"/>
+            </StackLayout>
+
+            <StackLayout  AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" IsVisible="{Binding Carregando}" x:Name="SLCarregando" BackgroundColor="#5ED055">
+                <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <ActivityIndicator IsRunning="True" Color="White" />
+                    <Label TextColor="White" Text="Cadastrando chat/sala..."/>
+                </StackLayout>
+            </StackLayout>
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>
